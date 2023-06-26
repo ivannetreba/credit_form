@@ -1,103 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <style>
-    /* Стили для формы */
-    .form {
-      border: 1px solid gray;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <title>Расчет условий по кредиту</title>
+    <style>
+        #creditForm {
+            border: 1px solid gray;
+            padding: 20px;
+            width: 500px;
+        }
 
-    /* Стили для заголовков */
-    .form h2 {
-      color: black;
-      font-weight: bold;
-      font-size: 18px;
-      text-align: left;
-    }
+        h1 {
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+        }
 
-    /* Стили для надписей */
-    .form label {
-      color: gray;
-      font-size: 11px;
-    }
+        .slider-label {
+            color: gray;
+            font-size: 11px;
+            text-align: left;
+        }
 
-    /* Стили для ползунков */
-    .form input[type="range"] {
-      width: 100%;
-      margin-bottom: 10px;
-    }
+        .slider-value {
+            color: black;
+            font-size: 15px;
+        }
 
-    /* Стили для вывода значений ползунков */
-    .form .slider-value {
-      color: black;
-      font-weight: bold;
-      font-size: 15px;
-    }
-  </style>
+        .result-label {
+            color: gray;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .result-value {
+            color: black;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;   
+            background: yellow;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+    </style>
 </head>
 <body>
-  <div class="form" style="float: left;">
-    <h2>Введите данные для расчета условий по кредиту</h2>
-    <label for="loan-amount">Желаемая сумма кредита:</label>
-    <input type="range" id="loan-amount" min="50000" max="5000000">
-    <div class="slider-value">Сумма: <span id="loan-amount-value"></span> руб.</div>
+    <div id="creditForm">
+        <h1>Расчет условий по кредиту</h1>
+        
+        <!-- Желаемая сумма кредита -->
+        <p class="slider-label">Желаемая сумма кредита</p>
+        <input type="range" min="50000" max="5000000" value="50000" class="slider" id="creditAmount">
+        <p id="creditAmountValue" class="slider-value">50000 руб.</p>
+        
+        <!-- Срок кредита -->
+        <p class="slider-label">Срок кредита</p>
+        <input type="range" min="1" max="10" value="1" class="slider" id="creditTerm">
+        <p id="creditTermValue" class="slider-value">1 год</p>
+        
+        <!-- Ежемесячный заработок -->
+        <p class="slider-label">Ежемесячный заработок</p>
+        <input type="range" min="10000" max="1000000" value="10000" class="slider" id="salary">
+        <p id="salaryValue" class="slider-value">10000 руб.</p>
+        
+        <!-- Возраст -->
+        <p class="slider-label">Возраст</p>
+        <input type="range" min="18" max="99" value="18" class="slider" id="age">
+        <p id="ageValue" class="slider-value">18 лет</p>
+        
+        <!-- Результаты -->
+        <p class="result-label">Вы выбрали кредит на сумму</p>
+        <p id="finalAmount" class="result-value">50000 руб.</p>
 
-    <label for="loan-term">Срок кредита:</label>
-    <input type="range" id="loan-term" min="1" max="10">
-    <div class="slider-value">Срок: <span id="loan-term-value"></span> года</div>
+        <p class="result-label">На срок</p>
+                <p id="finalTerm" class="result-value">1 год</p>
 
-    <label for="monthly-income">Ежемесячный заработок:</label>
-    <input type="range" id="monthly-income" min="10000" max="1000000">
-    <div class="slider-value">Заработок: <span id="monthly-income-value"></span> руб.</div>
+        <p class="result-label">Ставка по кредиту составит</p>
+        <p id="interestRate" class="result-value">10 %</p>
 
-    <label for="age">Возраст:</label>
-    <input type="range" id="age" min="18" max="99">
-    <div class="slider-value">Возраст: <span id="age-value"></span> лет</div>
-  </div>
+        <p class="result-label">Ежемесячный платеж</p>
+        <p id="monthlyPayment" class="result-value">5000 руб.</p>
 
-  <div class="form" style="float: right;">
-    <h2>Условия кредита</h2>
-    <label>Вы выбрали кредит на сумму:</label>
-    <div class="slider-value">500,000 руб.</div>
+        <p class="result-label">Вероятность одобрения</p>
+        <p id="approvalProbability" class="result-value">5 %</p>
+    </div>
 
-    <label>На срок:</label>
-    <div class="slider-value">5 лет</div>
+    <script>
+        const creditAmountSlider = document.getElementById("creditAmount");
+        const creditTermSlider = document.getElementById("creditTerm");
+        const salarySlider = document.getElementById("salary");
+        const ageSlider = document.getElementById("age");
 
-    <label>Ставка по кредиту составит:</label>
-    <div class="slider-value">10 %</div>
+        const creditAmountValue = document.getElementById("creditAmountValue");
+        const creditTermValue = document.getElementById("creditTermValue");
+        const salaryValue = document.getElementById("salaryValue");
+        const ageValue = document.getElementById("ageValue");
 
-    <label>Ежемесячный платеж:</label>
-    <div class="slider-value">100,000 руб.</div>
+        const finalAmount = document.getElementById("finalAmount");
+        const finalTerm = document.getElementById("finalTerm");
+        const interestRate = document.getElementById("interestRate");
+        const monthlyPayment = document.getElementById("monthlyPayment");
+        const approvalProbability = document.getElementById("approvalProbability");
 
-    <label>Вероятность одобрения:</label>
-    <div class="slider-value">5 %</div>
-  </div>
+        creditAmountSlider.oninput = function() {
+            creditAmountValue.innerHTML = this.value + " руб.";
+            finalAmount.innerHTML = this.value + " руб.";
+            calculateMonthlyPayment();
+        }
 
-  <script>
-    // Обновление значений ползунков и их вывода
-    function updateSliderValue(sliderId, valueId) {
-      const slider = document.getElementById(sliderId);
-      const value = document.getElementById(valueId);
-      value.innerHTML = slider.value;
-    }
+        creditTermSlider.oninput = function() {
+            creditTermValue.innerHTML = this.value + " год";
+            finalTerm.innerHTML = this.value + " год";
+            calculateMonthlyPayment();
+        }
 
-    // Обработчики событий для ползунков
-    document.getElementById('loan-amount').addEventListener('input', function() {
-      updateSliderValue('loan-amount', 'loan-amount-value');
-    });
+        salarySlider.oninput = function() {
+            salaryValue.innerHTML = this.value + " руб.";
+        }
 
-    document.getElementById('loan-term').addEventListener('input', function() {
-      updateSliderValue('loan-term', 'loan-term-value');
-    });
+        ageSlider.oninput = function() {
+            ageValue.innerHTML = this.value + " лет";
+        }
 
-    document.getElementById('monthly-income').addEventListener('input', function() {
-      updateSliderValue('monthly-income', 'monthly-income-value');
-    });
+        function calculateMonthlyPayment() {
+            const creditAmount = parseInt(creditAmountSlider.value);
+            const creditTerm = parseInt(creditTermSlider.value);
+            const monthlyPaymentAmount = Math.floor(creditAmount / (creditTerm * 12));
+            monthlyPayment.innerHTML = monthlyPaymentAmount + " руб.";
+        }
 
-    document.getElementById('age').addEventListener('input', function() {
-      updateSliderValue('age', 'age-value');
-    });
-  </script>
+        calculateMonthlyPayment();
+    </script>
 </body>
 </html>
+
